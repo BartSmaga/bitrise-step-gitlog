@@ -102,5 +102,5 @@ outputs:
   - GITLOG_MESSAGE:
     opts:
       title: "Gitlog message"
-      summary: ""
+      summary: "Gitlog message"
       description: ""

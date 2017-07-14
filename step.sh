@@ -40,5 +40,4 @@ if which envman >/dev/null; then
     envman add --key GITLOG_MESSAGE --value "${CHANGELOG}"
 fi
 
-exit 1
 exit 0
