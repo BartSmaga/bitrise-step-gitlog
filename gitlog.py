@@ -9,6 +9,7 @@ import os
 import git
 import time
 import re
+from jira import JIRA
 
 def safeindex(data, key):
     """Returns index of the key in data or None if it does not exist"""
@@ -42,9 +43,9 @@ def str_commit(commit):
     s = "%s (%s; %s)\n" % (message_str, commit.author.name, date_str)
     return s
 
-def str_commits(version, commits, date=None, ticket_prefix=None):
+def str_commits(version, commits, date=None, ticket_prefix=None, jira=None):
     """Returns string with formatted commits information. Groups by ticket if ticket_prefix provided."""
-    
+        
     s = "#"
     if version is not None:
         s+= " Version %s" % version
@@ -70,7 +71,14 @@ def str_commits(version, commits, date=None, ticket_prefix=None):
                 other_commits.append(c)
         #print(tickets_commits)
         for ticket in sorted(tickets_commits.keys(), reverse=True):
-            s += " - %s\n\n" % ticket
+            s += " - %s" % ticket
+            if jira is not None:
+                try:
+                    issue = jira.issue(ticket)
+                    s += " %s (%s)" % (issue.fields.summary, issue.fields.status)
+                except:
+                    pass
+            s += "\n\n"
             for c in tickets_commits[ticket]:
                 m = str_commit(c).strip()
                 # remove the ticket reference if at the beginning of the message
@@ -90,12 +98,15 @@ def str_commits(version, commits, date=None, ticket_prefix=None):
     return s
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser()
     parser.add_argument('path', nargs='?', default='.', help='GIT repository path')
     parser.add_argument('--last', '-l', type=int, default=None, help='Last versions')
     #parser.add_argument('--branch', '-b', default='master')
     parser.add_argument('--ticket_prefix', '-tp', default=None, help='Ticket prefix, for example JIRA-')
+    parser.add_argument('--jira-url', default=None, help='JIRA URL, for example https://jira.atlassian.com')
+    parser.add_argument('--jira-username', default=None, help='JIRA user name')
+    parser.add_argument('--jira-password', default=None, help='JIRA user password')
+
     args = parser.parse_args()
 
     #parser.print_help()
@@ -105,6 +116,14 @@ if __name__ == "__main__":
         repo = git.Repo(repo_path)
     except git.InvalidGitRepositoryError:
         exit("Invalid GIT Repository at %s" % repo_path)
+
+    if args.jira_url is not None and args.jira_username is not None and args.jira_password is not None:
+        try:
+            jira = JIRA(args.jira_url, basic_auth=(args.jira_username, args.jira_password))
+        except:
+            jire = None
+    else:
+        jira = None
 
     # all the commits on the current branch
     all_commits = list(repo.iter_commits())
@@ -129,15 +148,15 @@ if __name__ == "__main__":
     except:
         last_version = None
     last_commit_date = all_commits[0].committed_date if len(all_commits) > 0 else None
-    changelog = str_commits(last_version, all_commits[:first_tag_index], date=last_commit_date, ticket_prefix=args.ticket_prefix)
-    
+    changelog = str_commits(last_version, all_commits[:first_tag_index], date=last_commit_date, ticket_prefix=args.ticket_prefix, jira=jira)
+
     prev_ti = None
     for ti in tags_indices[:args.last]:
         if prev_ti is not None:
             version = prev_ti[0]
             version_date = version.commit.committed_date
             commits = all_commits[prev_ti[1]:ti[1]]
-            changelog += str_commits(version, commits, date=version_date, ticket_prefix=args.ticket_prefix)
+            changelog += str_commits(version, commits, date=version_date, ticket_prefix=args.ticket_prefix, jira=jira)
         prev_ti = ti
         
     print(changelog)

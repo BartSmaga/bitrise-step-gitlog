@@ -72,7 +72,31 @@ inputs:
       description: "If provided commits are grouped by tickets."
       is_expand: false
       is_required: false
-      value_options: []
+  - jira_url:
+    opts:
+      title: "JIRA URL"
+      summary: "JIRA URL, for example https://jira.atlassian.com"
+      description: "If provided tickets have status fetched from JIRA"
+      is_expand: false
+      is_required: false
+      category: JIRA
+  - jira_username:
+    opts:
+      title: "JIRA user name"
+      summary: "Requires JIRA password to be provided as well"
+      description: ""
+      is_expand: false
+      is_required: false
+      category: JIRA
+  - jira_password:
+    opts:
+      title: "JIRA user password"
+      summary: "Requires JIRA username to be provided as well"
+      description: ""
+      is_expand: false
+      is_required: false
+      category: JIRA
+
 
 outputs:
   - GITLOG_MESSAGE:
