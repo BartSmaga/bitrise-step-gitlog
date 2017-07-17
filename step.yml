@@ -13,9 +13,9 @@ summary: |
   GIT Changelog
 description: |
   Generates changelog based on GIT metadata
-website: https://github.com/pokryfka/bitrise-step-gitlog
-source_code_url: https://github.com/pokryfka/bitrise-step-gitlog
-support_url: https://github.com/pokryfka/bitrise-step-gitlog
+website: https://github.com/SmagaBakery/bitrise-step-gitlog
+source_code_url: https://github.com/SmagaBakery/bitrise-step-gitlog
+support_url: https://github.com/SmagaBakery/bitrise-step-gitlog
 host_os_tags:
   - osx-10.10
   - ubuntu-16.04
