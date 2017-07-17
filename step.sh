@@ -8,8 +8,11 @@ set -e
 
 THIS_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-OPT="--last 1"
+OPT=""
 
+if [ -n "${last_n}" ] ; then
+    OPT+=" --last=${last_n}"
+fi
 if [ -n "${ticket_prefix}" ] ; then
     OPT+=" --ticket_prefix=${ticket_prefix}"
 fi

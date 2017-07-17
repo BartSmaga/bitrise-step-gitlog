@@ -100,7 +100,7 @@ def str_commits(version, commits, date=None, ticket_prefix=None, jira=None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('path', nargs='?', default='.', help='GIT repository path')
-    parser.add_argument('--last', '-l', type=int, default=None, help='Last versions')
+    parser.add_argument('--last', '-l', type=int, default=None, help='Last versions, 0 for all')
     #parser.add_argument('--branch', '-b', default='master')
     parser.add_argument('--ticket_prefix', '-tp', default=None, help='Ticket prefix, for example JIRA-')
     parser.add_argument('--jira-url', default=None, help='JIRA URL, for example https://jira.atlassian.com')
@@ -150,8 +150,10 @@ if __name__ == "__main__":
     last_commit_date = all_commits[0].committed_date if len(all_commits) > 0 else None
     changelog = str_commits(last_version, all_commits[:first_tag_index], date=last_commit_date, ticket_prefix=args.ticket_prefix, jira=jira)
 
+    last_tag_index = args.last if args.last != 0 else None
+
     prev_ti = None
-    for ti in tags_indices[:args.last]:
+    for ti in tags_indices[:last_tag_index]:
         if prev_ti is not None:
             version = prev_ti[0]
             version_date = version.commit.committed_date

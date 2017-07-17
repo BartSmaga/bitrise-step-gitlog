@@ -65,11 +65,19 @@ toolkit:
 
 
 inputs:
+  - last_n: 1
+    opts:
+      title: "Last versions"
+      summary: "Commits are grouped by tags, specifie how many tags shall be inclued in the changelog, 0 for all"
+      description: ""
+      is_expand: false
+      is_required: true
+      category: Config
   - ticket_prefix:
     opts:
       title: "Ticket prefix"
-      summary: "Ticket prefix, for example JIRA-"
-      description: "If provided commits are grouped by tickets."
+      summary: "Ticket prefix, for example JIRA-; If provided commits are grouped by tickets"
+      description: ""
       is_expand: false
       is_required: false
       category: Config
