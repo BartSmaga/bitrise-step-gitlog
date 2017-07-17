@@ -72,6 +72,15 @@ inputs:
       description: "If provided commits are grouped by tickets."
       is_expand: false
       is_required: false
+      category: Config
+  - deploy_dir: "${BITRISE_DEPLOY_DIR}"
+    opts:
+      title: "Deploy directory"
+      summary: "Directory where CHANGELOG.md file is created."
+      description: ""
+      is_expand: true
+      is_required: false
+      category: Config
   - jira_url:
     opts:
       title: "JIRA URL"
@@ -82,7 +91,7 @@ inputs:
       category: JIRA
   - jira_username:
     opts:
-      title: "JIRA user name"
+      title: "JIRA username"
       summary: "Requires JIRA password to be provided as well"
       description: ""
       is_expand: false
@@ -90,7 +99,7 @@ inputs:
       category: JIRA
   - jira_password:
     opts:
-      title: "JIRA user password"
+      title: "JIRA password"
       summary: "Requires JIRA username to be provided as well"
       description: ""
       is_expand: false
@@ -101,6 +110,11 @@ inputs:
 outputs:
   - GITLOG_MESSAGE:
     opts:
-      title: "Gitlog message"
-      summary: "Gitlog message"
+      title: "gitlog message"
+      summary: "gitlog message"
+      description: ""
+  - GITLOG_PATH:
+    opts:
+      title: "gitlog file path"
+      summary: "gitlog file path (set only if the deploy dir is specified)"
       description: ""

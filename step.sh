@@ -34,6 +34,13 @@ pip3 install -r requirements.txt
 
 CHANGELOG=`./gitlog.py ${OPT} ${BITRISE_SOURCE_DIR}`
 
+if [ -d "${deploy_dir}" ]; then
+    CHANGELOG_PATH="${deploy_dir}"/CHANGELOG.md
+    echo "Writing the changelog to ${CHANGELOG_PATH}"
+    echo "${CHANGELOG}" > ${CHANGELOG_PATH}
+    envman add --key GITLOG_PATH --value "${CHANGELOG_PATH}"
+fi
+
 echo "${CHANGELOG}"
 
 if which envman >/dev/null; then
